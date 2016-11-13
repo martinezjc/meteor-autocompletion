@@ -46,6 +46,7 @@ AutoCompletion.autocomplete = function (config) {
   // Build filtering
   filter = {};
   filter['limit'] = config['limit'];
+  filter['noResultMessage'] = config['noResultMessage'];
   filter['sort'] = config['sort'];
   filter['fields'] = {};
   filter['fields'][config['field']] = 1; // Only include the searchable
@@ -59,10 +60,20 @@ AutoCompletion.autocomplete = function (config) {
   logObj(results);
 
   // Get the name parameter from the results
-  autocompleteResults = []
+  autocompleteResults = [];
+
   for (var i = results.length - 1; i >= 0; i--) {
     autocompleteResults[i] = results[i][config['field']];
   };
+
+  if(autocompleteResults.length == 0)
+  {
+    autocompleteResults = [
+    {
+        label: config['noResultMessage'], 
+        value: 0
+    }];
+  }
 
   // Update the autocomplete result list
   $(config['element']).autocomplete({ source: autocompleteResults });
